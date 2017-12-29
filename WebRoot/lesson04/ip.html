@@ -1,0 +1,52 @@
+
+<html>
+  <head>
+    <title>ip.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="jquery-3.2.1.js"></script>
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<script type="text/javascript">
+		$(function(){
+			$("[type='button']").click(function(){
+				$("p").remove();
+				
+				var addCode=$("#addCode").val();
+				if(addCode==""){
+					var url="http://restapi.amap.com/v3/ip?key=f1118c884c3a7b9d002a440f47d2692f";
+					//{"status":"1","info":"OK","infocode":"10000","province":"北京市","city":"北京市","adcode":"110000","rectangle":"116.0119343,39.66127144;116.7829835,40.2164962"}
+					$.get(url,function(msg){
+						
+						$("body").append("<p>"+msg.province+","+msg.city+"</p>");
+	
+						var x=(parseFloat(msg.rectangle.replace(";",",").split(",")[0])+parseFloat(msg.rectangle.replace(";",",").split(",")[2]))/2
+  						var y=(parseFloat(msg.rectangle.replace(";",",").split(",")[1])+parseFloat(msg.rectangle.replace(";",",").split(",")[3]))/2
+						var url2="http://restapi.amap.com/v3/staticmap?location="+x+","+y+"&zoom=10&size=750*300&markers=mid,,A:"+x+","+y+"&key=f1118c884c3a7b9d002a440f47d2692f";												
+						$("html").append("<iframe src="+url2+" style='width:600px;height:850px'></iframe>");						
+					})
+				}
+				
+				var url="http://restapi.amap.com/v3/ip?ip="+addCode+"&key=f1118c884c3a7b9d002a440f47d2692f";
+				$.get(url,function(msg){
+					$("p").remove();
+					
+					$("body").append("<p>"+msg.province+","+msg.city+"</p>");
+					var x=(parseFloat(msg.rectangle.replace(";",",").split(",")[0])+parseFloat(msg.rectangle.replace(";",",").split(",")[2]))/2
+  						var y=(parseFloat(msg.rectangle.replace(";",",").split(",")[1])+parseFloat(msg.rectangle.replace(";",",").split(",")[3]))/2
+					var url2="http://restapi.amap.com/v3/staticmap?location="+x+","+y+"&zoom=10&size=750*300&markers=mid,,A:"+x+","+y+"&key=f1118c884c3a7b9d002a440f47d2692f";												
+					$("html").append("<iframe src="+url2+" style='width:600px;height:850px'></iframe>");		
+					
+				})
+				
+			});
+		})
+	</script>
+  </head>
+  
+  <body>
+  	
+    <input id="addCode" type="text" /><input type="button" value="根据IP定位"/>
+  </body>
+</html>
